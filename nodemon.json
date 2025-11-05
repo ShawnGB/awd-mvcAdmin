@@ -1,0 +1,6 @@
+{
+  "watch": ["src", "public/styles"],
+  "ext": "ts, json, njk, css",
+  "ignore": ["node_modules"],
+  "exec": "ts-node ./src/index.ts"
+}
