@@ -1,8 +1,8 @@
 import "dotenv/config";
 import express from "express";
 import nunjucks from "nunjucks";
-import { indexHandler } from "./handler/handlers";
 import { logger } from "./middleware/loggerMiddleware";
+import { router } from "./controller/routes";
 
 const app = express();
 const port = process.env.PORT || 3030;
@@ -19,8 +19,7 @@ app.use(logger);
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
-app.get("{/:id}", indexHandler);
+app.use(router);
 
 app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
