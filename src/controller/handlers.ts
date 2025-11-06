@@ -6,7 +6,7 @@ const indexHandler = (req: Request, res: Response) => {
 
 const adminHandler = (req: Request, res: Response) => {
   res.render("admin/admin.njk", {
-    title: "admin panel",
+    title: "Admin",
     message: "Admin Mvc",
   });
 };

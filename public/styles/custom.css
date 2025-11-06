@@ -1,3 +1,28 @@
+/* ===== CSS Variables ===== */
+:root {
+  --glass-light: rgba(255, 255, 255, 0.15);
+  --glass-medium: rgba(255, 255, 255, 0.3);
+  --glass-strong: rgba(255, 255, 255, 0.5);
+  --glass-strongest: rgba(255, 255, 255, 0.6);
+
+  --text-primary: rgba(50, 50, 70, 0.9);
+  --text-secondary: rgba(50, 50, 70, 0.7);
+  --text-tertiary: rgba(50, 50, 70, 0.5);
+  --text-white: rgba(255, 255, 255, 0.95);
+
+  --border-light: 1px solid rgba(255, 255, 255, 0.3);
+  --border-medium: 2px solid rgba(255, 255, 255, 0.5);
+
+  --shadow-soft: 0 4px 16px rgba(31, 38, 135, 0.2);
+  --shadow-medium: 0 8px 32px rgba(31, 38, 135, 0.37);
+
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 15px;
+  --radius-xl: 20px;
+}
+
+/* ===== Base Layout ===== */
 body {
   margin: 0;
   min-height: 100vh;
@@ -5,12 +30,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 0.5rem;
 }
 
 main.container {
-  width: 95%;
-  height: 95vh;
+  width: 98%;
+  height: 98vh;
   max-width: 100%;
   margin: 0;
   padding: 0;
@@ -21,14 +46,250 @@ main.container > article {
   width: 100%;
   height: 100%;
   margin: 0;
-  padding: 2rem;
+  padding: 1.5rem;
   overflow-y: auto;
-
-  /* Glassmorphic styling */
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--glass-light);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  border-radius: var(--radius-xl);
+  border: var(--border-light);
+  box-shadow: var(--shadow-medium);
+}
+
+/* ===== Admin Layout ===== */
+.admin-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.admin-container > h1 {
+  margin-bottom: 1rem;
+  color: var(--text-white);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.admin-layout {
+  display: flex;
+  gap: 1rem;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ===== Sidebar & Content Shared Glassmorphic Styles ===== */
+.admin-sidebar,
+.admin-content {
+  background: var(--glass-light);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-lg);
+  border: var(--border-light);
+  box-shadow: var(--shadow-soft);
+}
+
+.admin-sidebar {
+  min-width: 200px;
+  padding: 1.25rem;
+}
+
+.admin-content {
+  flex: 1;
+  padding: 1.25rem;
+  overflow-y: auto;
+}
+
+/* ===== Sidebar Navigation ===== */
+.admin-sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-sidebar nav li {
+  margin-bottom: 0.5rem;
+}
+
+.admin-sidebar nav a {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.admin-sidebar nav a:hover {
+  background: var(--glass-light);
+  transform: translateX(5px);
+}
+
+.admin-sidebar nav a.active {
+  background: var(--glass-medium);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar nav a i {
+  width: 20px;
+  height: 20px;
+}
+
+/* ===== Table ===== */
+.admin-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--glass-strong) !important;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.admin-table thead {
+  background: var(--glass-strongest) !important;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.admin-table thead th {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  padding: 0.875rem 1rem;
+  text-align: left;
+  border-bottom: var(--border-medium);
+}
+
+.admin-table thead th:first-child,
+.admin-table td:first-child {
+  padding-left: 1.5rem;
+}
+
+.admin-table thead th:last-child,
+.admin-table td:last-child {
+  text-align: center;
+}
+
+.admin-table tbody tr {
+  background: transparent !important;
+  border-bottom: 1px solid var(--glass-medium);
+  transition: all 0.2s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--glass-strong) !important;
+  transform: scale(1.01);
+}
+
+.admin-table tbody tr:last-child {
+  border-bottom: none;
+}
+
+.admin-table td {
+  color: var(--text-primary) !important;
+  background: transparent !important;
+  padding: 0.875rem 1rem;
+  vertical-align: middle;
+  border: none !important;
+}
+
+.admin-table td:first-child {
+  font-family: 'Courier New', monospace;
+  color: var(--text-tertiary) !important;
+}
+
+.admin-table td:nth-child(2) {
+  font-weight: 500;
+  color: var(--text-primary) !important;
+}
+
+.admin-table td:nth-child(3) {
+  max-width: 400px;
+  color: var(--text-secondary) !important;
+  line-height: 1.5;
+}
+
+/* ===== Status Badges ===== */
+.badge {
+  display: inline-block;
+  padding: 0.35rem 0.75rem;
+  border-radius: var(--radius-xl);
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  backdrop-filter: blur(10px);
+  background: var(--glass-strongest);
+  border: 1px solid;
+}
+
+.badge-success {
+  color: rgb(22, 163, 74);
+  border-color: rgba(22, 163, 74, 0.3);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+}
+
+.badge-warning {
+  color: rgb(217, 119, 6);
+  border-color: rgba(217, 119, 6, 0.3);
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
+}
+
+.badge-error {
+  color: rgb(220, 38, 38);
+  border-color: rgba(220, 38, 38, 0.3);
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
+}
+
+/* ===== Action Buttons ===== */
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.action-buttons button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-buttons button:hover {
+  background: var(--glass-strongest);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-buttons button i {
+  width: 18px;
+  height: 18px;
+}
+
+.action-buttons .btn-edit:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: rgb(37, 99, 235);
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.action-buttons .btn-delete:hover {
+  background: rgba(255, 255, 255, 0.7);
+  color: rgb(220, 38, 38);
+  border-color: rgba(220, 38, 38, 0.4);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
 }

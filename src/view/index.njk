@@ -17,10 +17,11 @@
   </head>
   <body>
     <main class="container">
-      <article>
-        <h1>{{message}}</h1>
-        {% block content %} {% endblock %}
-      </article>
+      <article>{% block content %} {% endblock %}</article>
     </main>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+      lucide.createIcons();
+    </script>
   </body>
 </html>
