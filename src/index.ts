@@ -8,7 +8,7 @@ const app = express();
 const port = process.env.PORT || 3030;
 
 //nunjucks config
-nunjucks.configure("src/templates", {
+nunjucks.configure("src/view", {
   autoescape: true,
   express: app,
 });
