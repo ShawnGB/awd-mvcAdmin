@@ -3,17 +3,17 @@ const showPostModal = (post) => {
 
   document.getElementById("modal-title").textContent = post.title;
 
-  const statusBadge = document.getElementById("modal-status-badge");
-  statusBadge.textContent = post.status.toUpperCase();
-  statusBadge.className = "badge";
-
-  if (post.status === "published") {
-    statusBadge.classList.add("badge-success");
-  } else if (post.status === "draft") {
-    statusBadge.classList.add("badge-warning");
-  } else if (post.status === "archived") {
-    statusBadge.classList.add("badge-error");
-  }
+  // Set status select value and styling
+  const statusSelect = document.getElementById("modal-status-select");
+  statusSelect.dataset.postId = post.id;
+  statusSelect.value = post.status;
+  statusSelect.classList.remove(
+    "status-published",
+    "status-draft",
+    "status-archived",
+  );
+  statusSelect.classList.add(`status-${post.status}`);
+  statusSelect.dataset.previousStatus = post.status;
 
   // TODO: Uncomment when image upload is implemented
   // Image - show only if exists and is not empty
@@ -46,3 +46,87 @@ const showPostModal = (post) => {
     dialog.showModal();
   }
 };
+
+const deletePostFromTable = async (postId, buttonElement) => {
+  if (!confirm("Are you sure you want to delete this post?")) {
+    return;
+  }
+
+  try {
+    const response = await fetch(`/admin/post/${postId}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    // Remove the row from the DOM
+    const row = buttonElement.closest("tr");
+    row.style.transition = "opacity 0.3s ease-out";
+    row.style.opacity = "0";
+
+    setTimeout(() => {
+      row.remove();
+    }, 300);
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    alert("Failed to delete post. Please try again.");
+  }
+};
+
+const updateSelectStatus = (selectElement, status) => {
+  selectElement.value = status;
+  selectElement.classList.remove(
+    "status-published",
+    "status-draft",
+    "status-archived",
+  );
+  selectElement.classList.add(`status-${status}`);
+  selectElement.dataset.previousStatus = status;
+};
+
+const updatePostStatusFromTable = async (postId, selectElement) => {
+  const newStatus = selectElement.value;
+  const oldStatus = selectElement.dataset.previousStatus || newStatus;
+
+  updateSelectStatus(selectElement, newStatus);
+
+  try {
+    const response = await fetch(`/admin/post/${postId}/status`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ status: newStatus }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update status`);
+    }
+
+    const modalSelect = document.getElementById("modal-status-select");
+    if (modalSelect && modalSelect.dataset.postId === postId) {
+      updateSelectStatus(modalSelect, newStatus);
+    }
+
+    document
+      .querySelectorAll(".admin-table .status-select")
+      .forEach((tableSelect) => {
+        const row = tableSelect.closest("tr");
+        if (
+          row &&
+          row.querySelector(`button[onclick*="${postId}"]`) &&
+          tableSelect !== selectElement
+        ) {
+          updateSelectStatus(tableSelect, newStatus);
+        }
+      });
+  } catch (error) {
+    console.error(error);
+    alert("Failed to update status. Please try again.");
+    updateSelectStatus(selectElement, oldStatus);
+  }
+};
+
+const updatePostStatusFromModal = updatePostStatusFromTable;

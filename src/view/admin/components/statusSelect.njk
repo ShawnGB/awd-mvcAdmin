@@ -1,0 +1,11 @@
+{% macro statusSelect(postId, currentStatus, onchangeHandler) %}
+<select
+  class="status-select status-{{ currentStatus }}"
+  onchange="{{ onchangeHandler }}('{{ postId }}', this)"
+  name="status"
+>
+  <option value="published" {% if currentStatus == "published" %}selected{% endif %}>Published</option>
+  <option value="draft" {% if currentStatus == "draft" %}selected{% endif %}>Draft</option>
+  <option value="archived" {% if currentStatus == "archived" %}selected{% endif %}>Archived</option>
+</select>
+{% endmacro %}

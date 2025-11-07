@@ -1,9 +1,10 @@
+{% from "admin/components/statusSelect.njk" import statusSelect %}
+
 <table class="admin-table">
   <thead>
     <tr>
       <th>Title</th>
       <th>Teaser</th>
-      <th>Content</th>
       <th>Status</th>
       <th>Actions</th>
     </tr>
@@ -22,26 +23,8 @@
       >
         {{ post.teaser }}
       </td>
-      <td
-        style="
-          max-width: 400px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-        "
-      >
-        {{ post.content }}
-      </td>
       <td>
-        {% if post.status == "published" %}
-        <span class="badge badge-success">Published</span>
-        {% elif post.status == "draft" %}
-        <span class="badge badge-warning">Draft</span>
-        {% elif post.status == "archived" %}
-        <span class="badge badge-error">Archived</span>
-        {% else %}
-        <span class="badge">Unknown</span>
-        {% endif %}
+        {{ statusSelect(post.id, post.status, "updatePostStatusFromTable") }}
       </td>
       <td>
         <div class="action-buttons">
@@ -53,7 +36,11 @@
           >
             <i data-lucide="edit"></i>
           </button>
-          <button class="btn-delete" aria-label="Delete post">
+          <button
+            class="btn-delete"
+            onclick="deletePostFromTable('{{ post.id }}', this)"
+            aria-label="Delete post"
+          >
             <i data-lucide="trash-2"></i>
           </button>
         </div>

@@ -6,7 +6,16 @@
         <h2 id="modal-title" class="modal-title"></h2>
       </div>
       <div class="modal-header-right">
-        <span id="modal-status-badge" class="badge"></span>
+        <select
+          id="modal-status-select"
+          class="status-select"
+          onchange="updatePostStatusFromModal(this.dataset.postId, this)"
+          name="status"
+        >
+          <option value="published">Published</option>
+          <option value="draft">Draft</option>
+          <option value="archived">Archived</option>
+        </select>
         <button
           class="modal-close-btn"
           aria-label="Close"
