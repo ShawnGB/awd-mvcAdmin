@@ -1,11 +1,8 @@
 import { promises as fs, constants } from "node:fs";
-import path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 import seedData from "./seed.json";
-
-const DB_DIR = path.resolve("mockdb");
-const DB_FILE = path.join(DB_DIR, "db.json");
+import dbConfig from "./config";
 
 type SeedPost = Omit<Post, "id" | "status">;
 
@@ -23,15 +20,15 @@ const transformSeedData = (): Post[] => {
 };
 
 (async (): Promise<void> => {
-  await fs.mkdir(DB_DIR, { recursive: true });
+  await fs.mkdir(dbConfig.dir, { recursive: true });
 
   try {
-    await fs.access(DB_FILE, constants.F_OK);
+    await fs.access(dbConfig.file, constants.F_OK);
     console.log("Mock database already exists");
   } catch {
     console.log("Creating mock database with seed data...");
     const posts = transformSeedData();
-    await fs.writeFile(DB_FILE, JSON.stringify(posts, null, 2), "utf-8");
+    await fs.writeFile(dbConfig.file, JSON.stringify(posts, null, 2), "utf-8");
     console.log(`Mock database created with ${posts.length} posts`);
   }
 })();

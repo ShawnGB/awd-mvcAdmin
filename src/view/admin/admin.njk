@@ -4,7 +4,9 @@
   <h1>{{title}}</h1>
   <div class="admin-layout">
     {% include "admin/components/sidebar.njk" %}
-    <div class="admin-content">{% include "admin/components/table.njk" %}</div>
+    <div class="admin-content">
+      {% include "admin/components/table.njk" %}
+    </div>
   </div>
 </section>
 

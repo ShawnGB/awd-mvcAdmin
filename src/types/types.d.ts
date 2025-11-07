@@ -9,4 +9,4 @@ interface Post {
   status: PostStatus;
 }
 
-type PostStatus = "published" | " draft" | "archived";
+type PostStatus = "published" | "draft" | "archived";
