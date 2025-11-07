@@ -1,0 +1,69 @@
+<dialog id="post-modal" class="post-modal">
+  <article class="post-modal-content">
+    <!-- Header with Title and Close Button -->
+    <header class="modal-header">
+      <div class="modal-header-left">
+        <h2 id="modal-title" class="modal-title"></h2>
+      </div>
+      <div class="modal-header-right">
+        <span id="modal-status-badge" class="badge"></span>
+        <button
+          class="modal-close-btn"
+          aria-label="Close"
+          onclick="document.getElementById('post-modal').close()"
+        >
+          ✕
+        </button>
+      </div>
+    </header>
+
+    <!-- TODO: Add image upload logic and store images in /public/images -->
+    <!-- <div id="modal-image-container" class="modal-image-container">
+      <img id="modal-image" src="" alt="" />
+    </div> -->
+
+    <!-- Metadata Card -->
+    <div class="modal-metadata-card">
+      <div class="metadata-item">
+        <span class="metadata-label">Author</span>
+        <span id="modal-author" class="metadata-value"></span>
+      </div>
+      <div class="metadata-divider"></div>
+      <div class="metadata-item">
+        <span class="metadata-label">Created</span>
+        <span id="modal-created" class="metadata-value"></span>
+      </div>
+      <div class="metadata-divider"></div>
+      <div class="metadata-item">
+        <span class="metadata-label">Post ID</span>
+        <code id="modal-id" class="metadata-code"></code>
+      </div>
+    </div>
+
+    <!-- Teaser Section -->
+    <div class="modal-section">
+      <h3 class="section-label">Teaser</h3>
+      <div class="section-content">
+        <p id="modal-teaser" class="section-text"></p>
+      </div>
+    </div>
+
+    <!-- Content Section -->
+    <div class="modal-section">
+      <h3 class="section-label">Content</h3>
+      <div class="section-content section-content-scrollable">
+        <div id="modal-content" class="section-text"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="modal-footer">
+      <button
+        class="modal-btn-close"
+        onclick="document.getElementById('post-modal').close()"
+      >
+        Close
+      </button>
+    </footer>
+  </article>
+</dialog>

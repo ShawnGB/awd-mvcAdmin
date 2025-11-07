@@ -12,8 +12,26 @@
     {% for post in posts %}
     <tr>
       <td>{{ post.title }}</td>
-      <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ post.teaser }}</td>
-      <td style="max-width: 400px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">{{ post.content | striptags }}</td>
+      <td
+        style="
+          max-width: 300px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        "
+      >
+        {{ post.teaser }}
+      </td>
+      <td
+        style="
+          max-width: 400px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        "
+      >
+        {{ post.content }}
+      </td>
       <td>
         {% if post.status == "published" %}
         <span class="badge badge-success">Published</span>
@@ -21,15 +39,41 @@
         <span class="badge badge-warning">Draft</span>
         {% elif post.status == "archived" %}
         <span class="badge badge-error">Archived</span>
+        {% else %}
+        <span class="badge">Unknown</span>
         {% endif %}
       </td>
       <td>
         <div class="action-buttons">
-          <button class="btn-edit"><i data-lucide="edit"></i></button>
-          <button class="btn-delete"><i data-lucide="trash-2"></i></button>
+          <button
+            class="btn-edit"
+            data-post="{{ post | dump | escape }}"
+            onclick="showPostModalFromButton(this)"
+            aria-label="Edit post"
+          >
+            <i data-lucide="edit"></i>
+          </button>
+          <button class="btn-delete" aria-label="Delete post">
+            <i data-lucide="trash-2"></i>
+          </button>
         </div>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+
+<script>
+  function showPostModalFromButton(btn) {
+    try {
+      const post = JSON.parse(btn.dataset.post);
+      if (typeof showPostModal === "function") {
+        showPostModal(post);
+      } else {
+        console.warn("showPostModal(post) is not defined.");
+      }
+    } catch (e) {
+      console.error("Invalid post JSON in data-post:", e);
+    }
+  }
+</script>
