@@ -1,6 +1,14 @@
 const showPostModal = (post) => {
   const dialog = document.getElementById("post-modal");
 
+  // Destroy any existing editor instance
+  if (window.destroyPostModalEditor) {
+    window.destroyPostModalEditor();
+  }
+
+  // Set post ID on dialog for update handler
+  dialog.dataset.postId = post.id;
+
   document.getElementById("modal-title").textContent = post.title;
 
   // Set status select value and styling
@@ -35,10 +43,13 @@ const showPostModal = (post) => {
     dateStyle: "medium",
     timeStyle: "short",
   });
-  document.getElementById("modal-id").textContent = post.id;
 
   document.getElementById("modal-teaser").textContent = post.teaser;
-  document.getElementById("modal-content").innerHTML = post.content;
+
+  // Initialize Quill editor with the post content
+  if (window.initPostModalEditor) {
+    window.initPostModalEditor(post.content || "");
+  }
 
   if (dialog.open) {
     dialog.close();
@@ -86,7 +97,7 @@ const updateSelectStatus = (selectElement, status) => {
   selectElement.dataset.previousStatus = status;
 };
 
-const updatePostStatusFromTable = async (postId, selectElement) => {
+const updatePostStatus = async (postId, selectElement) => {
   const newStatus = selectElement.value;
   const oldStatus = selectElement.dataset.previousStatus || newStatus;
 
@@ -105,6 +116,7 @@ const updatePostStatusFromTable = async (postId, selectElement) => {
       throw new Error(`Failed to update status`);
     }
 
+    // Sync status across all instances (modal and table rows)
     const modalSelect = document.getElementById("modal-status-select");
     if (modalSelect && modalSelect.dataset.postId === postId) {
       updateSelectStatus(modalSelect, newStatus);
@@ -129,7 +141,9 @@ const updatePostStatusFromTable = async (postId, selectElement) => {
   }
 };
 
-const updatePostStatusFromModal = updatePostStatusFromTable;
+// Aliases for backwards compatibility with template onclick handlers
+const updatePostStatusFromTable = updatePostStatus;
+const updatePostStatusFromModal = updatePostStatus;
 
 const openCreatePostModal = () => {
   const dialog = document.getElementById("create-post-modal");
@@ -178,5 +192,48 @@ const handleCreatePost = async (event) => {
   } catch (error) {
     console.error(error);
     alert("Failed to create post. Please try again.");
+  }
+};
+
+const handleUpdatePost = async () => {
+  const dialog = document.getElementById("post-modal");
+  const postId = dialog.dataset.postId;
+
+  if (!postId) {
+    alert("Post ID not found");
+    return;
+  }
+
+  const teaser = document.getElementById("modal-teaser").textContent;
+  const content = window.getPostEditorHtml
+    ? window.getPostEditorHtml()
+    : document.getElementById("modal-content").innerHTML;
+
+  const postData = {
+    teaser,
+    content,
+  };
+
+  try {
+    const response = await fetch(`/admin/post/${postId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to update post`);
+    }
+
+    // Close modal
+    dialog.close();
+
+    // Reload the page to show the updated post
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to update post. Please try again.");
   }
 };

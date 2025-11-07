@@ -3,3 +3,5 @@ dist
 .env
 CLAUDE.md
 GEMINI.md
+logs
+mockdb

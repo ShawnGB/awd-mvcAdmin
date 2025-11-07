@@ -239,39 +239,7 @@ main.container > article {
   line-height: 1.5;
 }
 
-/* ===== Status Badges ===== */
-.badge {
-  display: inline-block;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-xl);
-  font-size: 0.75rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  backdrop-filter: blur(10px);
-  background: var(--glass-strongest);
-  border: 1px solid;
-}
-
-.badge-success {
-  color: rgb(22, 163, 74);
-  border-color: rgba(22, 163, 74, 0.3);
-  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
-}
-
-.badge-warning {
-  color: rgb(217, 119, 6);
-  border-color: rgba(217, 119, 6, 0.3);
-  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.15);
-}
-
-.badge-error {
-  color: rgb(220, 38, 38);
-  border-color: rgba(220, 38, 38, 0.3);
-  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.15);
-}
-
-/* ===== Status Select (styled as badge) ===== */
+/* ===== Status Select ===== */
 .status-select {
   display: inline-block !important;
   padding: 0.35rem 2rem 0.35rem 0.75rem !important;
@@ -502,29 +470,6 @@ main.container > article {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Modal Image (Future Implementation) */
-.modal-image-container {
-  display: none !important;
-  margin-bottom: 0;
-  border-radius: var(--radius-lg);
-  overflow: hidden;
-  border: var(--border-light);
-  box-shadow: var(--shadow-soft);
-}
-
-.modal-image-container.show {
-  display: block !important;
-  margin-bottom: 1.5rem;
-}
-
-.modal-image-container img {
-  width: 100%;
-  height: auto;
-  max-height: 280px;
-  object-fit: cover;
-  display: block;
-}
-
 /* Modal Metadata */
 .modal-metadata-card {
   display: flex;
@@ -556,16 +501,6 @@ main.container > article {
   font-size: 0.95rem;
   color: var(--text-primary);
   font-weight: 500;
-}
-
-.metadata-code {
-  font-size: 0.85rem;
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.4);
-  padding: 0.35rem 0.6rem;
-  border-radius: var(--radius-sm);
-  font-family: "Courier New", monospace;
-  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .metadata-divider {
@@ -721,6 +656,157 @@ main.container > article {
 
 .modal-footer {
   gap: 0.75rem;
+}
+
+/* ===== Quill Editor Styling ===== */
+/* Quill toolbar */
+#modal-editor-toolbar {
+  background: var(--glass-medium) !important;
+  border: var(--border-light) !important;
+  border-bottom: none !important;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0 !important;
+  padding: 0.875rem 1.25rem !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#modal-editor-toolbar .ql-formats {
+  margin-right: 1.25rem;
+}
+
+#modal-editor-toolbar button {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-primary) !important;
+  padding: 0.5rem !important;
+  width: 36px !important;
+  height: 36px !important;
+  transition: all 0.2s ease !important;
+  margin: 0 0.25rem !important;
+}
+
+#modal-editor-toolbar select.ql-header {
+  background: rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--text-primary) !important;
+  padding: 0.5rem 2rem 0.5rem 0.75rem !important;
+  height: 36px !important;
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+  margin: 0 0.25rem !important;
+  cursor: pointer !important;
+}
+
+#modal-editor-toolbar select.ql-header option {
+  background: white !important;
+  color: var(--text-primary) !important;
+  padding: 0.5rem !important;
+}
+
+#modal-editor-toolbar button:hover,
+#modal-editor-toolbar select:hover {
+  background: rgba(255, 255, 255, 0.5) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px);
+}
+
+#modal-editor-toolbar button.ql-active {
+  background: rgba(255, 255, 255, 0.6) !important;
+  color: rgb(37, 99, 235) !important;
+  border-color: rgba(37, 99, 235, 0.3) !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.1) !important;
+}
+
+#modal-editor-toolbar .ql-stroke {
+  stroke: var(--text-primary) !important;
+}
+
+#modal-editor-toolbar .ql-fill {
+  fill: var(--text-primary) !important;
+}
+
+#modal-editor-toolbar button.ql-active .ql-stroke {
+  stroke: rgb(37, 99, 235) !important;
+}
+
+#modal-editor-toolbar button.ql-active .ql-fill {
+  fill: rgb(37, 99, 235) !important;
+}
+
+/* Quill editor container */
+.section-content-scrollable .ql-container {
+  border: none !important;
+  font-family: inherit;
+  font-size: 0.95rem !important;
+  color: var(--text-secondary) !important;
+}
+
+.section-content-scrollable .ql-editor {
+  padding: 0 !important;
+  min-height: 200px;
+  line-height: 1.7 !important;
+  color: var(--text-secondary) !important;
+}
+
+.section-content-scrollable .ql-editor.ql-blank::before {
+  color: var(--text-tertiary) !important;
+  font-style: italic;
+  left: 0 !important;
+}
+
+/* Quill editor content styling */
+.ql-editor h2,
+.ql-editor h3 {
+  color: var(--text-primary) !important;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.ql-editor h2 {
+  font-size: 1.5rem;
+}
+
+.ql-editor h3 {
+  font-size: 1.25rem;
+}
+
+.ql-editor strong {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ql-editor a {
+  color: rgb(37, 99, 235);
+  text-decoration: underline;
+}
+
+.ql-editor blockquote {
+  border-left: 3px solid rgba(255, 255, 255, 0.5);
+  padding-left: 1rem;
+  margin-left: 0;
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
+.ql-editor pre.ql-syntax {
+  background: rgba(0, 0, 0, 0.1) !important;
+  border: var(--border-light);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  overflow-x: auto;
+  color: var(--text-primary) !important;
+}
+
+.ql-editor ul,
+.ql-editor ol {
+  padding-left: 1.5rem;
+}
+
+.ql-editor li {
+  margin-bottom: 0.5rem;
 }
 
 /* ===== Scrollbar Styling ===== */

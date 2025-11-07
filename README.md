@@ -25,20 +25,38 @@ npm start
 - **Nunjucks** - Templating engine
 - **HTMX 2.0** - Dynamic interactions
 - **Pico CSS 2** - Semantic styling
+- **Quill 2.0** - Rich text editor
 - **Nodemon** - Development auto-reload
 
 ## Project Structure
 
 ```
 src/
-├── db/                          # Database layer
-├── handler/                     # Route handlers
+├── controller/                  # Route handlers and routes
+│   ├── handlers.ts
+│   ├── postHandlers.ts
+│   └── routes.ts
 ├── middleware/                  # Express middleware
-├── templates/                   # Nunjucks templates
+│   └── loggerMiddleware.ts
+├── model/                       # Data layer and database
+│   ├── config.ts
+│   ├── init.ts
+│   ├── posts.ts
+│   └── seed.json
+├── types/                       # TypeScript type definitions
+│   └── types.d.ts
+├── view/                        # Nunjucks templates
+│   ├── admin/
+│   │   ├── admin.njk
+│   │   └── components/
+│   └── index.njk
 └── index.ts                     # Server entry point
 
 public/
+├── js/                          # Client-side JavaScript
+│   └── admin.js
 └── styles/                      # Static CSS files
+    └── custom.css
 ```
 
 ## Configuration

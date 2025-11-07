@@ -1,5 +1,0 @@
-{% macro statusBadge(status) %}
-<span class="badge {% if status == 'published' %}badge-success{% elif status == 'draft' %}badge-warning{% elif status == 'archived' %}badge-error{% endif %}">
-  {{ status | upper }}
-</span>
-{% endmacro %}

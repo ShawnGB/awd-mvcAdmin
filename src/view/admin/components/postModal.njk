@@ -1,4 +1,4 @@
-<dialog id="post-modal" class="post-modal">
+<dialog id="post-modal" class="post-modal" data-post-id="">
   <article class="post-modal-content">
     <!-- Header with Title and Close Button -->
     <header class="modal-header">
@@ -26,11 +26,6 @@
       </div>
     </header>
 
-    <!-- TODO: Add image upload logic and store images in /public/images -->
-    <!-- <div id="modal-image-container" class="modal-image-container">
-      <img id="modal-image" src="" alt="" />
-    </div> -->
-
     <!-- Metadata Card -->
     <div class="modal-metadata-card">
       <div class="metadata-item">
@@ -42,25 +37,46 @@
         <span class="metadata-label">Created</span>
         <span id="modal-created" class="metadata-value"></span>
       </div>
-      <div class="metadata-divider"></div>
-      <div class="metadata-item">
-        <span class="metadata-label">Post ID</span>
-        <code id="modal-id" class="metadata-code"></code>
-      </div>
     </div>
 
     <!-- Teaser Section -->
     <div class="modal-section">
       <h3 class="section-label">Teaser</h3>
       <div class="section-content">
-        <p id="modal-teaser" class="section-text"></p>
+        <p id="modal-teaser" class="section-text" contenteditable="true"></p>
       </div>
     </div>
 
     <!-- Content Section -->
     <div class="modal-section">
       <h3 class="section-label">Content</h3>
+
+      <!-- Quill toolbar -->
+      <div id="modal-editor-toolbar">
+        <span class="ql-formats">
+          <select class="ql-header">
+            <option selected></option>
+            <option value="2"></option>
+            <option value="3"></option>
+          </select>
+          <button class="ql-bold"></button>
+          <button class="ql-italic"></button>
+          <button class="ql-underline"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-link"></button>
+          <button class="ql-blockquote"></button>
+          <button class="ql-code-block"></button>
+        </span>
+        <span class="ql-formats">
+          <button class="ql-list" value="ordered"></button>
+          <button class="ql-list" value="bullet"></button>
+        </span>
+        <!-- add <button class="ql-image"></button> if you later wire uploads -->
+      </div>
+
       <div class="section-content section-content-scrollable">
+        <!-- Quill mounts into this DIV -->
         <div id="modal-content" class="section-text"></div>
       </div>
     </div>
@@ -68,11 +84,70 @@
     <!-- Footer -->
     <footer class="modal-footer">
       <button
-        class="modal-btn-close"
+        type="button"
+        class="modal-btn-cancel"
         onclick="document.getElementById('post-modal').close()"
       >
-        Close
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="modal-btn-submit"
+        onclick="handleUpdatePost()"
+      >
+        Save Changes
       </button>
     </footer>
   </article>
 </dialog>
+
+<script>
+  // Keep a single instance per open modal
+  (function () {
+    let quill;
+
+    function initPostModalEditor(initialHtml = "") {
+      // Avoid double init
+      if (quill) return quill;
+
+      quill = new Quill("#modal-content", {
+        theme: "snow",
+        placeholder: "Write your post content…",
+        modules: {
+          toolbar: "#modal-editor-toolbar",
+          clipboard: { matchVisual: false },
+        },
+      });
+
+      // Seed content (e.g., sanitized HTML from server)
+      if (initialHtml) {
+        quill.clipboard.dangerouslyPasteHTML(initialHtml);
+      }
+
+      return quill;
+    }
+
+    function getPostEditorHtml() {
+      if (!quill) return "";
+      // This returns HTML that you MUST sanitize server-side before storing.
+      return quill.root.innerHTML;
+    }
+
+    function destroyPostModalEditor() {
+      if (!quill) return;
+      // Quill has no public destroy; clean the container to reset.
+      const container = document.getElementById("modal-content");
+      container.innerHTML = "";
+      quill = undefined;
+    }
+
+    // Expose helpers
+    window.initPostModalEditor = initPostModalEditor;
+    window.getPostEditorHtml = getPostEditorHtml;
+    window.destroyPostModalEditor = destroyPostModalEditor;
+
+    // Optional: auto-destroy when dialog closes
+    const dlg = document.getElementById("post-modal");
+    dlg?.addEventListener("close", destroyPostModalEditor);
+  })();
+</script>

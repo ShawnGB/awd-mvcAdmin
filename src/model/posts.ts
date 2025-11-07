@@ -78,4 +78,31 @@ const createPost = async (
   return newPost;
 };
 
-export { getAllPosts, getPost, deletePost, updatePostStatus, createPost };
+const updatePost = async (
+  id: string,
+  postData: Partial<Omit<Post, "id" | "createdAt">>,
+): Promise<Post> => {
+  const posts = await readPosts();
+  const postIndex = posts.findIndex((post) => post.id === id);
+
+  if (postIndex === -1) {
+    throw new Error(`Post with id ${id} not found`);
+  }
+
+  posts[postIndex] = {
+    ...posts[postIndex],
+    ...postData,
+  };
+
+  await writePosts(posts);
+  return posts[postIndex];
+};
+
+export {
+  getAllPosts,
+  getPost,
+  deletePost,
+  updatePostStatus,
+  createPost,
+  updatePost,
+};
