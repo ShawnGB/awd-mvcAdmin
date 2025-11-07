@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "./model/init";
 import express from "express";
 import nunjucks from "nunjucks";
 import { logger } from "./middleware/loggerMiddleware";
