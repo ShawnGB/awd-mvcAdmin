@@ -130,3 +130,53 @@ const updatePostStatusFromTable = async (postId, selectElement) => {
 };
 
 const updatePostStatusFromModal = updatePostStatusFromTable;
+
+const openCreatePostModal = () => {
+  const dialog = document.getElementById("create-post-modal");
+  const form = document.getElementById("create-post-form");
+
+  // Reset form
+  form.reset();
+
+  dialog.showModal();
+};
+
+const handleCreatePost = async (event) => {
+  event.preventDefault();
+
+  const form = event.target;
+  const formData = new FormData(form);
+
+  const postData = {
+    title: formData.get("title"),
+    author: formData.get("author"),
+    teaser: formData.get("teaser"),
+    content: formData.get("content"),
+  };
+
+  try {
+    const response = await fetch("/admin/post", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to create post`);
+    }
+
+    const newPost = await response.json();
+
+    // Close modal and reset form
+    document.getElementById("create-post-modal").close();
+    form.reset();
+
+    // Reload the page to show the new post
+    window.location.reload();
+  } catch (error) {
+    console.error(error);
+    alert("Failed to create post. Please try again.");
+  }
+};

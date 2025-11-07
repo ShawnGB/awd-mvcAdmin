@@ -1,4 +1,5 @@
 import { promises as fs } from "node:fs";
+import { v4 as uuidv4 } from "uuid";
 import dbConfig from "./config";
 
 // Utility functions
@@ -59,4 +60,22 @@ const updatePostStatus = async (
   return posts[postIndex];
 };
 
-export { getAllPosts, getPost, deletePost, updatePostStatus };
+const createPost = async (
+  postData: Omit<Post, "id" | "createdAt">,
+): Promise<Post> => {
+  const posts = await readPosts();
+
+  const newPost: Post = {
+    ...postData,
+    id: uuidv4(),
+    createdAt: Date.now(),
+    status: "draft",
+  };
+
+  posts.unshift(newPost);
+  await writePosts(posts);
+
+  return newPost;
+};
+
+export { getAllPosts, getPost, deletePost, updatePostStatus, createPost };

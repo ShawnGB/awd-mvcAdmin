@@ -1,16 +1,20 @@
 {% extends "index.njk" %} {% block content%}
 
 <section class="admin-container">
-  <h1>{{title}}</h1>
+  <div class="admin-header">
+    <h1>{{title}}</h1>
+    <button class="btn-create-post" onclick="openCreatePostModal()">
+      + Create Post
+    </button>
+  </div>
   <div class="admin-layout">
     {% include "admin/components/sidebar.njk" %}
-    <div class="admin-content">
-      {% include "admin/components/table.njk" %}
-    </div>
+    <div class="admin-content">{% include "admin/components/table.njk" %}</div>
   </div>
 </section>
 
-{% include "admin/components/postModal.njk" %}
+{% include "admin/components/postModal.njk" %} {% include
+"admin/components/createPostModal.njk" %}
 
 <script src="/js/admin.js"></script>
 

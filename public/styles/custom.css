@@ -72,10 +72,36 @@ main.container > article {
   flex-direction: column;
 }
 
-.admin-container > h1 {
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 1rem;
+}
+
+.admin-header h1 {
+  margin: 0;
   color: var(--text-white);
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-create-post {
+  padding: 0.7rem 1.5rem;
+  background: rgba(255, 255, 255, 0.4);
+  border: var(--border-light);
+  border-radius: var(--radius-lg);
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.btn-create-post:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .admin-layout {
@@ -613,6 +639,88 @@ main.container > article {
 
 .modal-btn-close:active {
   transform: translateY(0);
+}
+
+/* ===== Create Post Form ===== */
+.form-section {
+  margin-bottom: 1.25rem;
+}
+
+.form-section label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-section input,
+.form-section textarea,
+.form-section select {
+  background: var(--glass-strong);
+  border: var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 0.5rem 0.875rem;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.form-section input:focus,
+.form-section textarea:focus,
+.form-section select:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.6);
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+.form-section textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.6;
+}
+
+.form-section select {
+  cursor: pointer;
+}
+
+.modal-btn-submit,
+.modal-btn-cancel {
+  padding: 0.7rem 2rem;
+  border: var(--border-light);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.modal-btn-submit {
+  background: rgba(22, 163, 74, 0.3);
+  color: rgb(22, 163, 74);
+  border-color: rgba(22, 163, 74, 0.4);
+}
+
+.modal-btn-submit:hover {
+  background: rgba(22, 163, 74, 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(22, 163, 74, 0.2);
+}
+
+.modal-btn-cancel {
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-primary);
+}
+
+.modal-btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.modal-footer {
+  gap: 0.75rem;
 }
 
 /* ===== Scrollbar Styling ===== */

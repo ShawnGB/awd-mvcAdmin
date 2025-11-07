@@ -1,0 +1,87 @@
+<dialog id="create-post-modal" class="post-modal">
+  <article class="post-modal-content">
+    <form id="create-post-form" onsubmit="handleCreatePost(event)">
+      <!-- Header with Title and Close Button -->
+      <header class="modal-header">
+        <div class="modal-header-left">
+          <h2 class="modal-title">Create New Post</h2>
+        </div>
+        <div class="modal-header-right">
+          <button
+            type="button"
+            class="modal-close-btn"
+            aria-label="Close"
+            onclick="document.getElementById('create-post-modal').close()"
+          >
+            ✕
+          </button>
+        </div>
+      </header>
+
+      <!-- Form Fields -->
+      <div class="form-section">
+        <label for="create-title">
+          <span class="section-label">Title *</span>
+          <input
+            type="text"
+            id="create-title"
+            name="title"
+            required
+            placeholder="Enter post title"
+          />
+        </label>
+      </div>
+
+      <div class="form-section">
+        <label for="create-author">
+          <span class="section-label">Author *</span>
+          <input
+            type="text"
+            id="create-author"
+            name="author"
+            required
+            placeholder="Enter author name"
+          />
+        </label>
+      </div>
+
+      <div class="form-section">
+        <label for="create-teaser">
+          <span class="section-label">Teaser *</span>
+          <textarea
+            id="create-teaser"
+            name="teaser"
+            required
+            rows="3"
+            placeholder="Enter a short teaser for the post"
+          ></textarea>
+        </label>
+      </div>
+
+      <div class="form-section">
+        <label for="create-content">
+          <span class="section-label">Content *</span>
+          <textarea
+            id="create-content"
+            name="content"
+            required
+            rows="8"
+            placeholder="Enter the full post content"
+          ></textarea>
+        </label>
+      </div>
+
+      <!-- Footer -->
+      <footer class="modal-footer">
+        <button
+          type="button"
+          class="modal-btn-cancel"
+          onclick="document.getElementById('create-post-modal').close()"
+        >
+          Cancel
+        </button>
+        <button type="submit" class="modal-btn-submit">Create Post</button>
+      </footer>
+    </form>
+  </article>
+</dialog>
