@@ -2,6 +2,12 @@
 
 Minimal TypeScript Express.js starter template with Nunjucks templating and HTMX.
 
+## Preview
+
+![Admin Panel](Screenshot%202025-11-10%20at%2009.16.24.png)
+
+The admin panel provides a clean interface for managing posts with status controls, edit capabilities, and a responsive table view.
+
 ## Getting Started
 
 ```bash
