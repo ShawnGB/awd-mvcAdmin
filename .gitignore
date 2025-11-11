@@ -4,4 +4,4 @@ dist
 CLAUDE.md
 GEMINI.md
 logs
-mockdb
+*.db

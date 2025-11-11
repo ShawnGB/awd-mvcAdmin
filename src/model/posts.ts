@@ -1,79 +1,63 @@
-import { promises as fs } from "node:fs";
 import { v4 as uuidv4 } from "uuid";
-import dbConfig from "./config";
+import { getDB } from "../db/db";
 
-// Utility functions
-const readPosts = async (): Promise<Post[]> => {
-  try {
-    const posts = await fs.readFile(dbConfig.file, "utf-8");
-    return JSON.parse(posts);
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-const writePosts = async (posts: Post[]): Promise<void> => {
-  try {
-    await fs.writeFile(dbConfig.file, JSON.stringify(posts, null, 2));
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-// Model functions
 const getAllPosts = async (): Promise<Post[]> => {
-  return await readPosts();
+  const db = getDB();
+  return await db.all<Post[]>("SELECT * FROM posts ORDER BY createdAt DESC");
 };
 
 const getPost = async (id: string): Promise<Post> => {
-  const posts = await readPosts();
-  const post = posts.find((post) => post.id === id);
+  const db = getDB();
+  const post = await db.get<Post>("SELECT * FROM posts WHERE id = ?", id);
 
-  if (!post) {
-    throw new Error(`Post with id ${id} not found`);
-  }
+  if (!post) throw new Error(`Post with id ${id} not found`);
 
   return post;
 };
 
 const deletePost = async (id: string): Promise<void> => {
-  const posts = await readPosts();
-  const filteredPosts = posts.filter((post) => post.id !== id);
-  await writePosts(filteredPosts);
+  const db = getDB();
+  const result = await db.run("DELETE FROM posts WHERE id = ?", id);
+
+  if (result.changes === 0) throw new Error(`Post with id ${id} not found`);
 };
 
 const updatePostStatus = async (
   id: string,
   status: PostStatus,
 ): Promise<Post> => {
-  const posts = await readPosts();
-  const postIndex = posts.findIndex((post) => post.id === id);
+  const db = getDB();
 
-  if (postIndex === -1) {
-    throw new Error(`Post with id ${id} not found`);
-  }
+  await db.run("UPDATE posts SET status = ? WHERE id = ?", status, id);
 
-  posts[postIndex].status = status;
-  await writePosts(posts);
-  return posts[postIndex];
+  const updatedPost = await getPost(id);
+  return updatedPost;
 };
 
 const createPost = async (
   postData: Omit<Post, "id" | "createdAt">,
 ): Promise<Post> => {
-  const posts = await readPosts();
+  const db = getDB();
 
   const newPost: Post = {
     ...postData,
     id: uuidv4(),
     createdAt: Date.now(),
-    status: "draft",
+    status: postData.status || "draft",
   };
 
-  posts.unshift(newPost);
-  await writePosts(posts);
+  await db.run(
+    `INSERT INTO posts (id, title, image, author, createdAt, teaser, content, status)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+    newPost.id,
+    newPost.title,
+    newPost.image,
+    newPost.author,
+    newPost.createdAt,
+    newPost.teaser,
+    newPost.content,
+    newPost.status,
+  );
 
   return newPost;
 };
@@ -82,20 +66,49 @@ const updatePost = async (
   id: string,
   postData: Partial<Omit<Post, "id" | "createdAt">>,
 ): Promise<Post> => {
-  const posts = await readPosts();
-  const postIndex = posts.findIndex((post) => post.id === id);
+  const db = getDB();
 
-  if (postIndex === -1) {
-    throw new Error(`Post with id ${id} not found`);
+  const updates: string[] = [];
+  const values: unknown[] = [];
+
+  if (postData.title !== undefined) {
+    updates.push("title = ?");
+    values.push(postData.title);
+  }
+  if (postData.image !== undefined) {
+    updates.push("image = ?");
+    values.push(postData.image);
+  }
+  if (postData.author !== undefined) {
+    updates.push("author = ?");
+    values.push(postData.author);
+  }
+  if (postData.teaser !== undefined) {
+    updates.push("teaser = ?");
+    values.push(postData.teaser);
+  }
+  if (postData.content !== undefined) {
+    updates.push("content = ?");
+    values.push(postData.content);
+  }
+  if (postData.status !== undefined) {
+    updates.push("status = ?");
+    values.push(postData.status);
   }
 
-  posts[postIndex] = {
-    ...posts[postIndex],
-    ...postData,
-  };
+  if (updates.length === 0) {
+    return await getPost(id);
+  }
 
-  await writePosts(posts);
-  return posts[postIndex];
+  values.push(id);
+
+  await db.run(
+    `UPDATE posts SET ${updates.join(", ")} WHERE id = ?`,
+    ...values,
+  );
+
+  const updatedPost = await getPost(id);
+  return updatedPost;
 };
 
 export {
